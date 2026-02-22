@@ -68,6 +68,9 @@
   flex:0 0 auto;
 }
 
+.mail-actions{ display:flex; gap:8px; align-items:center; }
+.btn-delete{ padding:4px 8px; font-size:12px; }
+
 /* klplacido special styling (blue) */
 .mail-row.from-klplacido{
   background: #e6f4ff;

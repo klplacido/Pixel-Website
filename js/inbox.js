@@ -25,6 +25,9 @@ function renderInbox() {
         <div class="mail-subject">${escapeHtml(email.subject)}</div>
       </div>
       <div class="mail-date">${escapeHtml(email.date)}</div>
+      <div class="mail-actions">
+        <button class="btn btn-outline-pixel btn-delete">Delete</button>
+      </div>
     `;
 
     item.addEventListener("click", () => {
@@ -39,6 +42,25 @@ function renderInbox() {
     });
 
     if (email.author === "klplacido") item.classList.add("from-klplacido");
+
+    const del = item.querySelector('.btn-delete');
+    if (del) {
+      del.addEventListener('click', (ev) => {
+        ev.stopPropagation();
+        if (!confirm('Delete this letter?')) return;
+        const emails = getEmails();
+        const idx = emails.findIndex(e => e.id === email.id);
+        if (idx >= 0) {
+          emails.splice(idx, 1);
+          saveEmails(emails);
+          if (state.selectedEmail && state.selectedEmail.id === email.id) {
+            state.selectedEmail = null;
+            showView('inbox');
+          }
+          renderInbox();
+        }
+      });
+    }
 
     mailList.appendChild(item);
   });
