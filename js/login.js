@@ -56,6 +56,9 @@ function renderInbox() {
         if (env) env.classList.remove("opening");
       });
 
+      // flag special sender for styling
+      if (email.author === "klplacido") row.classList.add("from-klplacido");
+
       elMailList.appendChild(row);
     });
   } catch (err) {
@@ -124,7 +127,8 @@ document.getElementById("btn-send").addEventListener("click", () => {
     subject,
     body,
     date: formatDate(now),
-    ts: now.getTime()
+    ts: now.getTime(),
+    author: state.currentUser?.username || "unknown"
   };
 
   const emails = loadEmails();

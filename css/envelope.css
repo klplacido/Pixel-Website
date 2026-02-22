@@ -86,3 +86,14 @@
 /* opening */
 .envelope.opening{ animation:none; }
 .envelope.opening .env-flap{ transform: rotateX(170deg); }
+
+/* blue styling for klplacido letters */
+.envelope.from-klplacido .env-heart{
+  background: #2563eb;
+}
+.envelope.from-klplacido .env-flap::before{
+  border-top-color: rgba(37,99,235,.35);
+}
+.envelope.from-klplacido .env-base{
+  border-color: rgba(37,99,235,.55);
+}

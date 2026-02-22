@@ -67,3 +67,15 @@
   color: var(--muted);
   flex:0 0 auto;
 }
+
+/* klplacido special styling (blue) */
+.mail-row.from-klplacido{
+  background: #e6f4ff;
+  border-color: rgba(59,130,246,.35);
+}
+.mail-row.from-klplacido .heart{
+  background: #2563eb;
+}
+.mail-row.from-klplacido .mail-subject{
+  color: #1e40af;
+}

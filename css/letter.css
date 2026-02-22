@@ -31,3 +31,10 @@
   line-height: 1.55;
   margin:0;
 }
+
+/* blue paper styling for klplacido */
+.letter-paper.from-klplacido{
+  background: #e9f5ff;
+  border-color: rgba(37,99,235,.65);
+  color: #08304a;
+}

@@ -18,16 +18,23 @@ function renderInbox() {
 
   emails.forEach((email, index) => {
     const item = document.createElement("div");
-    item.className = "mail-item";
+    item.className = "mail-row";
     item.innerHTML = `
-      <span>❤️ ${email.subject}</span>
-      <span>${email.date}</span>
+      <div class="mail-left">
+        <div class="heart"></div>
+        <div class="mail-subject">${escapeHtml(email.subject)}</div>
+      </div>
+      <div class="mail-date">${escapeHtml(email.date)}</div>
     `;
 
     item.addEventListener("click", () => {
       state.selectedEmail = email;
       showView("envelope");
+      const env = document.getElementById("envelope");
+      if (env) env.classList.remove("opening");
     });
+
+    if (email.author === "klplacido") item.classList.add("from-klplacido");
 
     mailList.appendChild(item);
   });
@@ -42,9 +49,12 @@ document.getElementById("btn-send").addEventListener("click", () => {
   const emails = getEmails();
 
   const newEmail = {
+    id: crypto.randomUUID(),
     subject,
     body,
     date: new Date().toLocaleDateString(),
+    ts: Date.now(),
+    author: state.currentUser?.username || "unknown"
   };
 
   // Add new email to top
