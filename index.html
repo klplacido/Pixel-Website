@@ -165,8 +165,17 @@
       measurementId: "G-NC5GZ1CXP0"
     };
 
-    firebase.initializeApp(firebaseConfig);
-    window.__DB = firebase.firestore();
+    try {
+      if (typeof firebase !== 'undefined' && firebase?.initializeApp) {
+        firebase.initializeApp(firebaseConfig);
+        window.__DB = firebase.firestore();
+      } else {
+        window.__DB = null;
+      }
+    } catch (err) {
+      console.error('Firebase init failed', err);
+      window.__DB = null;
+    }
   </script>
 
   <!-- JS -->

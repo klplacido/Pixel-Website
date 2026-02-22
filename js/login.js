@@ -106,7 +106,8 @@ function renderInbox() {
     // Re-render
     renderInbox();
   }
-document.getElementById("btn-login").addEventListener("click", () => {
+const btnLoginEl = document.getElementById("btn-login");
+if (btnLoginEl) btnLoginEl.addEventListener("click", () => {
   // If Firestore path used, the realtime listener will re-render and we still clear inputs + close modal.
   if (window.lettersAPI && window.lettersAPI.add) {
     subjectEl.value = "";
@@ -151,7 +152,8 @@ if (btnLogout) {
 }
 
 /* ---------- send (writer only) ---------- */
-document.getElementById("btn-send").addEventListener("click", () => {
+const btnSendEl = document.getElementById("btn-send");
+if (btnSendEl) btnSendEl.addEventListener("click", () => {
   if (!canWrite()) {
     alert("You don't have permission to add letters.");
     return;

@@ -70,7 +70,8 @@ function renderInbox(emailsParam) {
   });
 }
 
-document.getElementById("btn-send").addEventListener("click", () => {
+const btnSendEl_inbox = document.getElementById("btn-send");
+if (btnSendEl_inbox) btnSendEl_inbox.addEventListener("click", () => {
   const subject = document.getElementById("compose-subject").value;
   const body = document.getElementById("compose-body").value;
 

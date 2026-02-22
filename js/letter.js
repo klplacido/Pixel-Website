@@ -1,4 +1,5 @@
-document.getElementById("btn-letter-back").addEventListener("click", () => {
+const btnLetterBack = document.getElementById("btn-letter-back");
+if (btnLetterBack) btnLetterBack.addEventListener("click", () => {
   showView("inbox");
 });
 
