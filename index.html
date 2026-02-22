@@ -153,5 +153,15 @@
   <script src="js/inbox.js"></script>
   <script src="js/envelope.js"></script>
   <script src="js/letter.js"></script>
+
+  <script>
+  window.addEventListener("error", (e) => {
+    const box = document.getElementById("login-error");
+    if (box) {
+      box.style.display = "block";
+      box.textContent = "JS ERROR: " + (e.message || "Unknown error");
+    }
+  });
+</script>
 </body>
 </html>
