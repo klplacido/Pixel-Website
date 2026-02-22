@@ -97,5 +97,39 @@ document.getElementById("btn-send").addEventListener("click", () => {
   modal.hide();
 
   // Re-render
-  renderInbox();
+  function renderInbox() {
+  try {
+    const emails = loadEmails().sort((a, b) => (b.ts || 0) - (a.ts || 0));
+    elMailList.innerHTML = "";
+
+    if (emails.length === 0) {
+      elMailList.innerHTML = `<div class="empty-state">No emails yet.</div>`;
+      return;
+    }
+
+    emails.forEach(email => {
+      const row = document.createElement("div");
+      row.className = "mail-row";
+      row.innerHTML = `
+        <div class="mail-left">
+          <div class="heart"></div>
+          <div class="mail-subject">${escapeHtml(email.subject)}</div>
+        </div>
+        <div class="mail-date">${escapeHtml(email.date)}</div>
+      `;
+
+      row.addEventListener("click", () => {
+        state.selectedEmail = email;
+        showView("envelope");
+        const env = document.getElementById("envelope");
+        if (env) env.classList.remove("opening");
+      });
+
+      elMailList.appendChild(row);
+    });
+  } catch (err) {
+    console.error("renderInbox error:", err);
+    elMailList.innerHTML = `<div class="empty-state">Inbox failed to load.</div>`;
+  }
+}
 });
