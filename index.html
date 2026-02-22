@@ -49,13 +49,14 @@
             <div class="login-error" id="login-error">Invalid username or password.</div>
           </div>
 
+          <!-- ✅ FIXED: properly closed cat-box -->
           <div class="cat-box">
-            <img 
-                 src="https://giffiles.alphacoders.com/426/4268.gif" 
-                alt="pixel cat"
-                class="cat-gif"
-  >
-        </div>
+            <img
+              src="https://giffiles.alphacoders.com/426/4268.gif"
+              alt="pixel cat"
+              class="cat-gif"
+            >
+          </div>
         </div>
       </div>
     </div>
@@ -68,11 +69,9 @@
       <div class="panel-topbar">
         <span class="icon">✉</span><span>EMAILS</span>
 
-        <!-- OPTIONAL: shows current user + role if you want -->
         <span id="user-badge" class="ms-2" style="font-size:12px;font-weight:900;opacity:.9;"></span>
 
         <div class="ms-auto inbox-actions">
-          <!-- ✅ IMPORTANT: id added so writer/reader permission can hide this -->
           <button id="btn-new" class="btn btn-outline-pixel" data-bs-toggle="modal" data-bs-target="#composeModal">New</button>
           <button class="btn btn-outline-pixel" id="btn-logout">Logout</button>
         </div>

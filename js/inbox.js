@@ -1,74 +1,64 @@
 // js/inbox.js
 
-const elMailList = document.getElementById("mail-list");
-const btnNew = document.getElementById("btn-new");
+const STORAGE_KEY = "pixel_webmail_emails";
 
-function applyPermissions(){
-  // Reader: hide New button
-  if(btnNew){
-    btnNew.style.display = canWrite() ? "inline-block" : "none";
-  }
+function getEmails() {
+  return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
 }
 
-function renderInbox(){
-  const emails = getEmailsNewestFirst();
-  elMailList.innerHTML = "";
+function saveEmails(emails) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(emails));
+}
 
-  if(emails.length === 0){
-    elMailList.innerHTML = `<div style="font-weight:900;color:var(--muted);padding:10px;">No emails yet.</div>`;
-    return;
-  }
+function renderInbox() {
+  const mailList = document.getElementById("mail-list");
+  mailList.innerHTML = "";
 
-  emails.forEach(email => {
-    const row = document.createElement("div");
-    row.className = "mail-row";
-    row.innerHTML = `
-      <div class="mail-left">
-        <div class="heart"></div>
-        <div class="mail-subject" title="${escapeHtml(email.subject)}">${escapeHtml(email.subject)}</div>
-      </div>
-      <div class="mail-date">${escapeHtml(email.date)}</div>
+  const emails = getEmails();
+
+  emails.forEach((email, index) => {
+    const item = document.createElement("div");
+    item.className = "mail-item";
+    item.innerHTML = `
+      <span>❤️ ${email.subject}</span>
+      <span>${email.date}</span>
     `;
 
-    row.addEventListener("click", () => {
+    item.addEventListener("click", () => {
       state.selectedEmail = email;
       showView("envelope");
-      document.getElementById("envelope").classList.remove("opening");
     });
 
-    elMailList.appendChild(row);
+    mailList.appendChild(item);
   });
 }
 
-// ✅ Compose / Send (writer only)
 document.getElementById("btn-send").addEventListener("click", () => {
-  if(!canWrite()){
-    alert("Read-only account. Only klplacido can add letters.");
-    return;
-  }
+  const subject = document.getElementById("compose-subject").value;
+  const body = document.getElementById("compose-body").value;
 
-  const subject = (document.getElementById("compose-subject").value || "").trim() || "Untitled";
-  const body    = (document.getElementById("compose-body").value || "").trim() || "(empty)";
+  if (!subject || !body) return;
 
-  const now = new Date();
+  const emails = getEmails();
+
   const newEmail = {
-    id: crypto.randomUUID(),
     subject,
     body,
-    date: formatDate(now),
-    ts: now.getTime()
+    date: new Date().toLocaleDateString(),
   };
 
-  const emails = loadEmails();
-  emails.push(newEmail);
+  // Add new email to top
+  emails.unshift(newEmail);
+
   saveEmails(emails);
+
+  renderInbox();
 
   document.getElementById("compose-subject").value = "";
   document.getElementById("compose-body").value = "";
 
-  const modalEl = document.getElementById("composeModal");
-  const modal = bootstrap.Modal.getInstance(modalEl);
+  const modal = bootstrap.Modal.getInstance(
+    document.getElementById("composeModal")
+  );
   modal.hide();
-
-  renderInbox();
 });
