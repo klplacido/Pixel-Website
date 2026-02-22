@@ -97,3 +97,22 @@
 .envelope.from-klplacido .env-base{
   border-color: rgba(37,99,235,.55);
 }
+
+/* ensure bottom pieces also turn blue */
+.envelope.from-klplacido .env-bottom::before{
+  left:0;
+  border-right:180px solid rgba(37,99,235,.20);
+}
+.envelope.from-klplacido .env-bottom::after{
+  right:0;
+  border-left:180px solid rgba(37,99,235,.20);
+}
+
+/* subtle blue fill for the envelope body */
+.envelope.from-klplacido .env-base{
+  background: rgba(233,245,255,0.85);
+}
+
+.envelope.from-klplacido .env-flap::before{
+  filter: drop-shadow(0 2px 0 rgba(37,99,235,.75));
+}
