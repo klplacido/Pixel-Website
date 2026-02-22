@@ -10,11 +10,11 @@ function saveEmails(emails) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(emails));
 }
 
-function renderInbox(emailsParam) {
+function renderInbox() {
   const mailList = document.getElementById("mail-list");
   mailList.innerHTML = "";
 
-  const emails = Array.isArray(emailsParam) ? emailsParam : getEmails();
+  const emails = getEmails();
 
   emails.forEach((email, index) => {
     const item = document.createElement("div");
@@ -48,20 +48,16 @@ function renderInbox(emailsParam) {
       del.addEventListener('click', (ev) => {
         ev.stopPropagation();
         if (!confirm('Delete this letter?')) return;
-        if (window.lettersAPI && window.lettersAPI.del) {
-          window.lettersAPI.del(email.id).then(() => {});
-        } else {
-          const emails = getEmails();
-          const idx = emails.findIndex(e => e.id === email.id);
-          if (idx >= 0) {
-            emails.splice(idx, 1);
-            saveEmails(emails);
-            if (state.selectedEmail && state.selectedEmail.id === email.id) {
-              state.selectedEmail = null;
-              showView('inbox');
-            }
-            renderInbox();
+        const emails = getEmails();
+        const idx = emails.findIndex(e => e.id === email.id);
+        if (idx >= 0) {
+          emails.splice(idx, 1);
+          saveEmails(emails);
+          if (state.selectedEmail && state.selectedEmail.id === email.id) {
+            state.selectedEmail = null;
+            showView('inbox');
           }
+          renderInbox();
         }
       });
     }
@@ -70,12 +66,13 @@ function renderInbox(emailsParam) {
   });
 }
 
-const btnSendEl_inbox = document.getElementById("btn-send");
-if (btnSendEl_inbox) btnSendEl_inbox.addEventListener("click", () => {
+document.getElementById("btn-send").addEventListener("click", () => {
   const subject = document.getElementById("compose-subject").value;
   const body = document.getElementById("compose-body").value;
 
   if (!subject || !body) return;
+
+  const emails = getEmails();
 
   const newEmail = {
     id: crypto.randomUUID(),
@@ -86,14 +83,12 @@ if (btnSendEl_inbox) btnSendEl_inbox.addEventListener("click", () => {
     author: state.currentUser?.username || "unknown"
   };
 
-  if (window.lettersAPI && window.lettersAPI.add) {
-    window.lettersAPI.add(newEmail).then(() => {});
-  } else {
-    const emails = getEmails();
-    emails.unshift(newEmail);
-    saveEmails(emails);
-    renderInbox();
-  }
+  // Add new email to top
+  emails.unshift(newEmail);
+
+  saveEmails(emails);
+
+  renderInbox();
 
   document.getElementById("compose-subject").value = "";
   document.getElementById("compose-body").value = "";
@@ -102,10 +97,4 @@ if (btnSendEl_inbox) btnSendEl_inbox.addEventListener("click", () => {
     document.getElementById("composeModal")
   );
   modal.hide();
-});
-
-// start Firestore realtime listener if available
-if (window.lettersAPI && window.lettersAPI.start) {
-  window.lettersAPI.start((list) => renderInbox(list));
-}
 });
