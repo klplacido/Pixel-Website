@@ -63,6 +63,24 @@ function applyPermissions() {
   btnNew.style.display = canWrite() ? "inline-block" : "none";
 }
 
+document.getElementById("btn-login").addEventListener("click", () => {
+  const u = (elLoginUser.value || "").trim();
+  const p = (elLoginPass.value || "").trim();
+
+  const account = USERS[u];
+
+  if(account && p === account.password){
+    elLoginErr.style.display = "none";
+    state.currentUser = { username: u, role: account.role };
+
+    renderInbox();
+    applyPermissions();
+    showView("inbox");
+  } else {
+    elLoginErr.style.display = "block";
+  }
+});
+
 /* ---------- send (writer only) ---------- */
 document.getElementById("btn-send").addEventListener("click", () => {
   if (!canWrite()) {
