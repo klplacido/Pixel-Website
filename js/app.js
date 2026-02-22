@@ -82,3 +82,44 @@ window.addEventListener('storage', (e) => {
     // ignore
   }
 });
+
+// Firestore wrapper API (if Firestore is initialized)
+;(function(){
+  const db = window.__DB || null;
+  const lettersCol = db ? db.collection('letters') : null;
+
+  function startListener(cb){
+    if (!lettersCol) return;
+    lettersCol.orderBy('ts','desc').onSnapshot(snapshot => {
+      const list = [];
+      snapshot.forEach(doc => list.push({ id: doc.id, ...doc.data() }));
+      try { cb(list); } catch(e){}
+    });
+  }
+
+  function addLetter(obj){
+    if (!lettersCol) return Promise.resolve().then(() => { const list = loadEmails(); list.unshift(obj); saveEmails(list); if (typeof renderInbox === 'function') renderInbox(); });
+    return lettersCol.add(obj);
+  }
+
+  function deleteLetter(id){
+    if (!lettersCol) return Promise.resolve().then(() => { const list = loadEmails(); const idx = list.findIndex(l=>l.id===id); if (idx>=0){ list.splice(idx,1); saveEmails(list); if (typeof renderInbox === 'function') renderInbox(); } });
+    return lettersCol.doc(id).delete();
+  }
+
+  function getAllOnce(){
+    if (!lettersCol) return Promise.resolve(getEmailsNewestFirst());
+    return lettersCol.orderBy('ts','desc').get().then(snapshot => {
+      const list = [];
+      snapshot.forEach(doc => list.push({ id: doc.id, ...doc.data() }));
+      return list;
+    });
+  }
+
+  window.lettersAPI = {
+    start: startListener,
+    add: addLetter,
+    del: deleteLetter,
+    getOnce: getAllOnce
+  };
+})();

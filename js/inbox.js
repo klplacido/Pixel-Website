@@ -10,11 +10,11 @@ function saveEmails(emails) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(emails));
 }
 
-function renderInbox() {
+function renderInbox(emailsParam) {
   const mailList = document.getElementById("mail-list");
   mailList.innerHTML = "";
 
-  const emails = getEmails();
+  const emails = Array.isArray(emailsParam) ? emailsParam : getEmails();
 
   emails.forEach((email, index) => {
     const item = document.createElement("div");
@@ -48,16 +48,20 @@ function renderInbox() {
       del.addEventListener('click', (ev) => {
         ev.stopPropagation();
         if (!confirm('Delete this letter?')) return;
-        const emails = getEmails();
-        const idx = emails.findIndex(e => e.id === email.id);
-        if (idx >= 0) {
-          emails.splice(idx, 1);
-          saveEmails(emails);
-          if (state.selectedEmail && state.selectedEmail.id === email.id) {
-            state.selectedEmail = null;
-            showView('inbox');
+        if (window.lettersAPI && window.lettersAPI.del) {
+          window.lettersAPI.del(email.id).then(() => {});
+        } else {
+          const emails = getEmails();
+          const idx = emails.findIndex(e => e.id === email.id);
+          if (idx >= 0) {
+            emails.splice(idx, 1);
+            saveEmails(emails);
+            if (state.selectedEmail && state.selectedEmail.id === email.id) {
+              state.selectedEmail = null;
+              showView('inbox');
+            }
+            renderInbox();
           }
-          renderInbox();
         }
       });
     }
@@ -72,8 +76,6 @@ document.getElementById("btn-send").addEventListener("click", () => {
 
   if (!subject || !body) return;
 
-  const emails = getEmails();
-
   const newEmail = {
     id: crypto.randomUUID(),
     subject,
@@ -83,12 +85,14 @@ document.getElementById("btn-send").addEventListener("click", () => {
     author: state.currentUser?.username || "unknown"
   };
 
-  // Add new email to top
-  emails.unshift(newEmail);
-
-  saveEmails(emails);
-
-  renderInbox();
+  if (window.lettersAPI && window.lettersAPI.add) {
+    window.lettersAPI.add(newEmail).then(() => {});
+  } else {
+    const emails = getEmails();
+    emails.unshift(newEmail);
+    saveEmails(emails);
+    renderInbox();
+  }
 
   document.getElementById("compose-subject").value = "";
   document.getElementById("compose-body").value = "";
@@ -97,4 +101,10 @@ document.getElementById("btn-send").addEventListener("click", () => {
     document.getElementById("composeModal")
   );
   modal.hide();
+});
+
+// start Firestore realtime listener if available
+if (window.lettersAPI && window.lettersAPI.start) {
+  window.lettersAPI.start((list) => renderInbox(list));
+}
 });

@@ -36,24 +36,27 @@ function renderInbox() {
       elMailList.innerHTML = `<div class="empty-state">No emails yet.</div>`;
       return;
     }
-
-    emails.forEach(email => {
-      const row = document.createElement("div");
-      row.className = "mail-row";
-      row.innerHTML = `
-        <div class="mail-left">
-          <div class="heart"></div>
-          <div class="mail-subject">${escapeHtml(email.subject)}</div>
-        </div>
-        <div class="mail-date">${escapeHtml(email.date)}</div>
-        <div class="mail-actions">
-          <button class="btn btn-outline-pixel btn-delete">Delete</button>
-        </div>
-      `;
-
-      row.addEventListener("click", () => {
-        state.selectedEmail = email;
-        showView("envelope");
+    const delBtn = row.querySelector('.btn-delete');
+    if (delBtn) {
+      delBtn.addEventListener('click', (ev) => {
+        ev.stopPropagation();
+        if (!confirm('Delete this letter?')) return;
+        if (window.lettersAPI && window.lettersAPI.del) {
+          window.lettersAPI.del(email.id).then(() => {});
+        } else {
+          const emails = loadEmails();
+          const idx = emails.findIndex(e => e.id === email.id);
+          if (idx >= 0) {
+            emails.splice(idx, 1);
+            saveEmails(emails);
+            if (state.selectedEmail && state.selectedEmail.id === email.id) {
+              state.selectedEmail = null;
+              showView('inbox');
+            }
+            renderInbox();
+          }
+        }
+      });
 
         const env = document.getElementById("envelope");
         if (env) {
@@ -81,25 +84,37 @@ function renderInbox() {
               state.selectedEmail = null;
               showView('inbox');
             }
-            renderInbox();
-          }
-        });
-      }
+  if (window.lettersAPI && window.lettersAPI.add) {
+    window.lettersAPI.add(newEmail).then(() => {});
+  } else {
+    const emails = loadEmails();
 
-      elMailList.appendChild(row);
-    });
-  } catch (err) {
-    console.error("renderInbox error:", err);
-    elMailList.innerHTML = `<div class="empty-state">Inbox failed to load.</div>`;
+    // Gmail style: newest first
+    emails.unshift(newEmail);
+
+    saveEmails(emails);
+
+    // Clear inputs
+    subjectEl.value = "";
+    bodyEl.value = "";
+
+    // Close modal (only if modal is open)
+    const modalEl = document.getElementById("composeModal");
+    const modal = bootstrap.Modal.getInstance(modalEl);
+    if (modal) modal.hide();
+
+    // Re-render
+    renderInbox();
   }
-}
-
-function applyPermissions() {
-  if (!btnNew) return;
-  btnNew.style.display = canWrite() ? "inline-block" : "none";
-}
-
 document.getElementById("btn-login").addEventListener("click", () => {
+  // If Firestore path used, the realtime listener will re-render and we still clear inputs + close modal.
+  if (window.lettersAPI && window.lettersAPI.add) {
+    subjectEl.value = "";
+    bodyEl.value = "";
+    const modalEl = document.getElementById("composeModal");
+    const modal = bootstrap.Modal.getInstance(modalEl);
+    if (modal) modal.hide();
+  }
   const u = (elLoginUser.value || "").trim();
   const p = (elLoginPass.value || "").trim();
 

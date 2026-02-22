@@ -149,6 +149,25 @@
 
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+  <script>
+    // Firebase config (provided by user)
+    const firebaseConfig = {
+      apiKey: "AIzaSyA2FQ-sc0H3BDUeSWrX8F0H_PExFGF6yIM",
+      authDomain: "pixel-web-3acac.firebaseapp.com",
+      projectId: "pixel-web-3acac",
+      storageBucket: "pixel-web-3acac.firebasestorage.app",
+      messagingSenderId: "581880612127",
+      appId: "1:581880612127:web:a53b13cace6609585f9c2a",
+      measurementId: "G-NC5GZ1CXP0"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    window.__DB = firebase.firestore();
+  </script>
 
   <!-- JS -->
   <script src="js/app.js"></script>
