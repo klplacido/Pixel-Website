@@ -7,6 +7,7 @@ const btnNew = document.getElementById("btn-new"); // index.html must have id="b
 const elLoginUser = document.getElementById("login-username");
 const elLoginPass = document.getElementById("login-password");
 const elLoginErr = document.getElementById("login-error");
+const elUserBadge = document.getElementById("user-badge");
 
 /* ---------- storage helpers ---------- */
 function loadEmails() {
@@ -78,6 +79,9 @@ document.getElementById("btn-login").addEventListener("click", () => {
     elLoginErr.style.display = "none";
     state.currentUser = { username: u, role: account.role };
 
+    // show user badge
+    if (elUserBadge) elUserBadge.textContent = u;
+
     renderInbox();
     applyPermissions();
     showView("inbox");
@@ -85,6 +89,21 @@ document.getElementById("btn-login").addEventListener("click", () => {
     elLoginErr.style.display = "block";
   }
 });
+
+// Logout handler
+const btnLogout = document.getElementById("btn-logout");
+if (btnLogout) {
+  btnLogout.addEventListener("click", () => {
+    state.currentUser = null;
+    state.selectedEmail = null;
+    if (elUserBadge) elUserBadge.textContent = "";
+    if (elLoginUser) elLoginUser.value = "";
+    if (elLoginPass) elLoginPass.value = "";
+    if (elLoginErr) elLoginErr.style.display = "none";
+    applyPermissions();
+    showView("login");
+  });
+}
 
 /* ---------- send (writer only) ---------- */
 document.getElementById("btn-send").addEventListener("click", () => {
