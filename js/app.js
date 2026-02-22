@@ -71,3 +71,14 @@ function escapeHtml(str){
 function canWrite(){
   return state.currentUser && state.currentUser.role === "writer";
 }
+
+// Listen for storage changes in other tabs/windows and re-render the inbox
+window.addEventListener('storage', (e) => {
+  try {
+    if (e.key === STORAGE_KEY) {
+      if (typeof renderInbox === 'function') renderInbox();
+    }
+  } catch (err) {
+    // ignore
+  }
+});
