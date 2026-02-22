@@ -2,8 +2,10 @@ const elEnvelope = document.getElementById("envelope");
 
 elEnvelope.addEventListener("click", () => {
   if(!state.selectedEmail) return;
-  // set envelope/letter styling based on author
-  elEnvelope.classList.toggle("from-klplacido", state.selectedEmail?.author === "klplacido");
+  // set envelope/letter styling based on author (treat seeded Trial Letter as klplacido)
+  const sel = state.selectedEmail || {};
+  const isKl = (sel.author === "klplacido") || (!sel.author && sel.subject === "Trial Letter");
+  elEnvelope.classList.toggle("from-klplacido", isKl);
 
   elEnvelope.classList.add("opening");
 

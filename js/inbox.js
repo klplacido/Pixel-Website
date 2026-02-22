@@ -33,7 +33,8 @@ function renderInbox() {
       const env = document.getElementById("envelope");
       if (env) {
         env.classList.remove("opening");
-        env.classList.toggle("from-klplacido", email.author === "klplacido");
+        const isKl = (email.author === "klplacido") || (!email.author && email.subject === "Trial Letter");
+        env.classList.toggle("from-klplacido", isKl);
       }
     });
 
