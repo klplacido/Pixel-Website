@@ -31,7 +31,10 @@ function renderInbox() {
       state.selectedEmail = email;
       showView("envelope");
       const env = document.getElementById("envelope");
-      if (env) env.classList.remove("opening");
+      if (env) {
+        env.classList.remove("opening");
+        env.classList.toggle("from-klplacido", email.author === "klplacido");
+      }
     });
 
     if (email.author === "klplacido") item.classList.add("from-klplacido");

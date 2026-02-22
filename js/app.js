@@ -41,7 +41,8 @@ function loadEmails(){
     subject: "Trial Letter",
     body: "practice lang po hehehe thanks",
     date: "2/22/2026",
-    ts: new Date("2026-02-22T08:00:00").getTime()
+    ts: new Date("2026-02-22T08:00:00").getTime(),
+    author: "klplacido"
   }];
   localStorage.setItem(STORAGE_KEY, JSON.stringify(seed));
   return seed;
