@@ -3,6 +3,11 @@
 const elMailList = document.getElementById("mail-list");
 const btnNew = document.getElementById("btn-new"); // index.html must have id="btn-new"
 
+// Login elements (IDs from index.html)
+const elLoginUser = document.getElementById("login-username");
+const elLoginPass = document.getElementById("login-password");
+const elLoginErr = document.getElementById("login-error");
+
 /* ---------- storage helpers ---------- */
 function loadEmails() {
   const raw = localStorage.getItem(STORAGE_KEY);
