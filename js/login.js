@@ -115,7 +115,7 @@ if (btnLogout) {
 /* ---------- send (writer only) ---------- */
 document.getElementById("btn-send").addEventListener("click", () => {
   if (!canWrite()) {
-    alert("Read-only account. Only klplacido can add letters.");
+    alert("You don't have permission to add letters.");
     return;
   }
 

@@ -1,7 +1,7 @@
 // js/app.js
 
 const USERS = {
-  fiaaarry:   { password: "12345678", role: "reader" },  // read-only
+  fiaaarry:   { password: "12345678", role: "writer" },  // allow sending letters
   klplacido:  { password: "12345678", role: "writer" }   // can add letters
 };
 
