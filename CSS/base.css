@@ -1,0 +1,163 @@
+:root{
+  --bg:#f6c8f0;
+  --panel:#ffd7f6;
+  --hot:#ff2db4;
+  --hot2:#ff59c7;
+  --muted:#6b6b6b;
+  --shadow: rgba(0,0,0,.15);
+  --font: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;
+}
+
+html, body { height: 100%; }
+
+body{
+  margin:0;
+  min-height:100vh;
+  background: var(--bg);
+  font-family: var(--font);
+}
+
+/* =========================
+   VIEW SWITCHING (LOCKED)
+   ========================= */
+.view { 
+  display: none !important; 
+  width: 100%;
+}
+
+.view.active { 
+  display: flex !important; 
+  justify-content: center; 
+  align-items: center; 
+  min-height: 100vh; 
+  padding: 28px 16px;
+}
+/* =========================
+   PANEL + COMMON UI
+   ========================= */
+.panel{
+  width: min(740px, 94vw);
+  background: var(--panel);
+  border-radius: 6px;
+  box-shadow: 0 10px 24px var(--shadow);
+  overflow:hidden;
+  border: 2px solid rgba(255,45,180,.35);
+}
+
+.panel--login{ max-width: 560px; }
+
+.panel--transparent{
+  background:transparent;
+  border:none;
+  box-shadow:none;
+  width: min(740px, 94vw);
+}
+
+.panel-topbar{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  background: var(--hot);
+  color:white;
+  padding: 10px 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 14px;
+}
+
+.panel-topbar .icon{
+  width:18px;height:18px;
+  display:inline-grid;place-items:center;
+  background: rgba(255,255,255,.12);
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+.pixel-title{
+  font-size: 26px;
+  font-weight: 900;
+  color: var(--hot);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.btn-pixel{
+  border-radius: 0;
+  background: var(--hot);
+  color:white;
+  border: 2px solid rgba(0,0,0,.08);
+  font-weight: 900;
+  text-transform: uppercase;
+  font-size: 12px;
+  padding: 9px 12px;
+}
+.btn-pixel:hover{ background: var(--hot2); color:white; }
+
+.btn-outline-pixel{
+  border-radius: 0;
+  border: 2px solid rgba(255,45,180,.65);
+  background: transparent;
+  color: var(--hot);
+  font-weight: 900;
+  text-transform: uppercase;
+  font-size: 12px;
+  padding: 9px 10px;
+}
+.btn-outline-pixel:hover{
+  background: rgba(255,45,180,.12);
+  color: var(--hot);
+}
+
+/* =========================
+   MODAL VIBE
+   ========================= */
+.modal-content{
+  border-radius: 0;
+  border: 2px solid rgba(255,45,180,.65);
+}
+.modal-header{
+  background: var(--hot);
+  color:#fff;
+  border-bottom: 2px solid rgba(0,0,0,.08);
+  border-radius:0;
+  text-transform: uppercase;
+  font-weight: 900;
+}
+.modal-footer{
+  border-top: 2px solid rgba(0,0,0,.06);
+  border-radius:0;
+}
+.modal-label{
+  font-weight: 900;
+  color: var(--hot);
+}
+.modal-input{
+  border-radius:0 !important;
+  border:2px solid rgba(255,45,180,.55) !important;
+}
+
+/* =========================
+   FIX TOPBAR VISIBILITY
+   ========================= */
+
+/* Make topbar text white */
+.panel-topbar {
+  color: #ffffff !important;
+}
+
+/* Make buttons inside topbar white */
+.panel-topbar .btn-outline-pixel {
+  color: #ffffff !important;
+  border-color: #ffffff !important;
+}
+
+/* Hover effect */
+.panel-topbar .btn-outline-pixel:hover {
+  background: rgba(255,255,255,0.2) !important;
+  color: #ffffff !important;
+}
+
+/* Make icon visible */
+.panel-topbar .icon {
+  color: #ffffff !important;
+}
